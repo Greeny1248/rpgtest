@@ -2,6 +2,7 @@ class OverworldMap {
   constructor(config) {
     this.gameObjects = config.gameObjects;
     this.walls = config.walls || {};
+
     this.lowerImage = new Image();
     this.lowerImage.src = config.lowerSrc;
 
@@ -28,6 +29,28 @@ class OverworldMap {
     const { x, y } = utils.nextPosition(currentX, CurrentY, direction);
     return this.walls[`${x},${y}`] || false;
   }
+
+  mountObjects() {
+    Object.values(this.gameObjects).forEach((o) => {
+      //todo mounting options
+
+      o.mount(this);
+    });
+  }
+
+  addWall(x, y) {
+    this.walls[`${x},${y}`] = true;
+  }
+
+  removeWall(x, y) {
+    delete this.walls[`${x},${y}`];
+  }
+
+  moveWall(wasX, wasY, direction) {
+    this.removeWall(wasX, wasY);
+    const { x, y } = utils.nextPosition(wasX, wasY, direction);
+    this.addWall(x, y);
+  }
 }
 
 window.OverworldMaps = {
@@ -40,9 +63,9 @@ window.OverworldMaps = {
         x: utils.withGrid(5),
         y: utils.withGrid(6),
       }),
-      npc1: new GameObject({
-        x: 7,
-        y: 9,
+      npc1: new Person({
+        x: utils.withGrid(7),
+        y: utils.withGrid(9),
         src: "/images/characters/people/npc1.png",
       }),
     },
@@ -60,22 +83,24 @@ window.OverworldMaps = {
     upperSrc: "/images/maps/KitchenUpper.png",
     gameObjects: {
       hero: new Person({
-        x: utils.withGrid(3),
+        isPlayerControlled: true,
+        x: utils.withGrid(5),
         y: utils.withGrid(6),
       }),
-      npc1: new GameObject({
-        x: 9,
-        y: 8,
+      npc1: new Person({
+        x: utils.withGrid(7),
+        y: utils.withGrid(9),
         src: "/images/characters/people/npc1.png",
       }),
-      npc2: new GameObject({
-        x: 10,
-        y: 4,
+
+      npc2: new Person({
+        x: utils.withGrid(10),
+        y: utils.withGrid(4),
         src: "/images/characters/people/npc2.png",
       }),
-      npc3: new GameObject({
-        x: 4,
-        y: 5,
+      npc3: new Person({
+        x: utils.withGrid(4),
+        y: utils.withGrid(5),
         src: "/images/characters/people/npc3.png",
       }),
     },

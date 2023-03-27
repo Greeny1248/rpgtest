@@ -11,8 +11,9 @@ class Overworld {
       //clears canvas
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-      //Camera  movement
+      //Camera  movement which toon
       const cameraPerson = this.map.gameObjects.hero;
+
       // updates all objects
       Object.values(this.map.gameObjects).forEach((object) => {
         object.update({
@@ -39,9 +40,12 @@ class Overworld {
     step();
   }
   init() {
-    this.map = new OverworldMap(window.OverworldMaps.DemoRoom);
+    this.map = new OverworldMap(window.OverworldMaps.Kitchen);
+    this.map.mountObjects();
+
     this.directionInput = new DirectionInput();
     this.directionInput.init();
+
     this.startGameLoop();
   }
 }

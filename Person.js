@@ -16,27 +16,32 @@ class Person extends GameObject {
     if (this.movingProgessRemaining > 0) {
       this.updatePosition();
     } else {
-    }
-    this.updateSprite(state);
+      //more cases for starting to walk will be here
+      //
+      //
 
-    if (
-      this.isPlayerControlled &&
-      this.movingProgessRemaining === 0 &&
-      state.arrow
-    ) {
-      this.startBehavior(state, {
-        type: "walk",
-        direction: state.arrow,
-      });
+      // case: keyboard ready and have arrow pressed i.e not cutscene
+      if (this.isPlayerControlled && state.arrow) {
+        this.startBehavior(state, {
+          type: "walk",
+          direction: state.arrow,
+        });
+      }
+      this.updateSprite(state);
     }
   }
 
   startBehavior(state, behavior) {
+    //setting direction to behevaior has
     this.direction = behavior.direction;
+    
     if (behavior.type === "walk") {
+      //stop if space taken
       if (state.map.isSpaceTaken(this.x, this.y, this.direction)) {
         return;
       }
+      //ready to walk
+      state.map.moveWall(this.x, this.y, this.direction);
       this.movingProgessRemaining = 16;
     }
   }
@@ -46,18 +51,11 @@ class Person extends GameObject {
     this.movingProgessRemaining -= 1;
   }
 
-  updateSprite(state) {
-    if (
-      this.isPlayerControlled &&
-      this.movingProgessRemaining === 0 &&
-      !state.arrow
-    ) {
-      this.sprite.setAnimation("idle-" + this.direction);
-      return;
-    }
-
+  updateSprite() {
     if (this.movingProgessRemaining > 0) {
       this.sprite.setAnimation("walk-" + this.direction);
+      return;
     }
+    this.sprite.setAnimation("idle-" + this.direction);
   }
 }
