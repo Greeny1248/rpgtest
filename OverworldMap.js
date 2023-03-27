@@ -1,7 +1,7 @@
 class OverworldMap {
   constructor(config) {
     this.gameObjects = config.gameObjects;
-
+    this.walls = config.walls || {};
     this.lowerImage = new Image();
     this.lowerImage.src = config.lowerSrc;
 
@@ -24,6 +24,10 @@ class OverworldMap {
       utils.withGrid(6) - cameraPerson.y
     );
   }
+  isSpaceTaken(currentX, CurrentY, direction) {
+    const { x, y } = utils.nextPosition(currentX, CurrentY, direction);
+    return this.walls[`${x},${y}`] || false;
+  }
 }
 
 window.OverworldMaps = {
@@ -41,6 +45,14 @@ window.OverworldMaps = {
         y: 9,
         src: "/images/characters/people/npc1.png",
       }),
+    },
+    walls: {
+      //this is the counter
+      //"16,16":true
+      [utils.asGridCoord(7, 6)]: true,
+      [utils.asGridCoord(8, 6)]: true,
+      [utils.asGridCoord(7, 7)]: true,
+      [utils.asGridCoord(8, 7)]: true,
     },
   },
   Kitchen: {

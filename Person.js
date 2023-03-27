@@ -10,32 +10,45 @@ class Person extends GameObject {
       down: ["y", 1],
       left: ["x", -1],
       right: ["x", 1],
-    }
+    };
   }
   update(state) {
-    this.updatePosition();
+    if (this.movingProgessRemaining > 0) {
+      this.updatePosition();
+    } else {
+    }
     this.updateSprite(state);
-    
+
     if (
-        this.isPlayerControlled  &&
-        this.movingProgessRemaining === 0 &&state.arrow
-        ) {
-        console.log("here")
-      this.direction = state.arrow;
+      this.isPlayerControlled &&
+      this.movingProgessRemaining === 0 &&
+      state.arrow
+    ) {
+      this.startBehavior(state, {
+        type: "walk",
+        direction: state.arrow,
+      });
+    }
+  }
+
+  startBehavior(state, behavior) {
+    this.direction = behavior.direction;
+    if (behavior.type === "walk") {
+      if (state.map.isSpaceTaken(this.x, this.y, this.direction)) {
+        return;
+      }
       this.movingProgessRemaining = 16;
     }
   }
   updatePosition() {
-    if (this.movingProgessRemaining > 0) {
-      const [property, change] = this.directionUpdate[this.direction];
-      this[property] += change;
-      this.movingProgessRemaining -= 1;
-    }
+    const [property, change] = this.directionUpdate[this.direction];
+    this[property] += change;
+    this.movingProgessRemaining -= 1;
   }
 
   updateSprite(state) {
     if (
-       this.isPlayerControlled &&
+      this.isPlayerControlled &&
       this.movingProgessRemaining === 0 &&
       !state.arrow
     ) {
