@@ -32,6 +32,7 @@ class OverworldEvent {
       {
         type: "walk",
         direction: this.event.direction,
+        retry: true
       }
     );
     //handler to complete when correct person is finished walking
