@@ -40,7 +40,7 @@ class Sprite {
     this.currentAnimationFrame = 0;
 
     //how quick frames moves
-    this.animationFrameLimit = config.animationFrameLimit || 16;
+    this.animationFrameLimit = config.animationFrameLimit || 32;
     this.animationFrameProgress = this.animationFrameLimit;
 
     //reference the game obj

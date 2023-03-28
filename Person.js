@@ -21,34 +21,57 @@ class Person extends GameObject {
       //
 
       // case: keyboard ready and have arrow pressed i.e not cutscene
-      if (this.isPlayerControlled && state.arrow) {
-        this.startBehavior(state, {
-          type: "walk",
-          direction: state.arrow,
-        });
+      if (
+        !state.map.isCutscenePlaying &&
+        this.isPlayerControlled &&
+        state.arrow
+        ) {
+          this.startBehavior(state, {
+            type: "walk",
+            direction: state.arrow,
+          });
+        }
+        this.updateSprite(state);
       }
-      this.updateSprite(state);
     }
-  }
-
-  startBehavior(state, behavior) {
-    //setting direction to behevaior has
-    this.direction = behavior.direction;
     
-    if (behavior.type === "walk") {
+    startBehavior(state, behavior) {
+      //setting direction to behevaior has
+      this.direction = behavior.direction;
+      
+      if (behavior.type === "walk") {
       //stop if space taken
       if (state.map.isSpaceTaken(this.x, this.y, this.direction)) {
+        
+       behavior.retry && setTimeout(() => {
+          this.startBehavior(state, behavior);
+        }, 10);
         return;
       }
       //ready to walk
       state.map.moveWall(this.x, this.y, this.direction);
       this.movingProgessRemaining = 16;
+      this.updateSprite(state);
+    }
+    if (behavior.type === "stand") {
+      setTimeout(() => {
+        utils.emitEvent("PersonStandComplete", {
+          whoId: this.id
+        })
+      }, behavior.time)
     }
   }
   updatePosition() {
     const [property, change] = this.directionUpdate[this.direction];
     this[property] += change;
     this.movingProgessRemaining -= 1;
+
+    if (this.movingProgessRemaining === 0) {
+      //finished walk
+      utils.emitEvent("PersonWalkingComplete", {
+        whoId: this.id,
+      });
+    }
   }
 
   updateSprite() {
