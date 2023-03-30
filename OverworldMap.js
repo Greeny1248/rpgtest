@@ -13,6 +13,7 @@ class OverworldMap {
   }
 
   drawLowerImage(ctx, cameraPerson) {
+    
     ctx.drawImage(
       this.lowerImage,
       utils.withGrid(10.5) - cameraPerson.x,

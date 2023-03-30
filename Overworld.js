@@ -4,7 +4,11 @@ class Overworld {
     this.canvas = this.element.querySelector(".game-canvas");
     this.ctx = this.canvas.getContext("2d");
     this.map = null;
+    this.sound = new Audio("./music/music.ogg");
+   this.sound.play();
+    this.sound.loop = true;
   }
+
 
   startGameLoop() {
     const step = () => {
@@ -26,11 +30,13 @@ class Overworld {
       this.map.drawLowerImage(this.ctx, cameraPerson);
 
       // Draw Game objs
-      Object.values(this.map.gameObjects).sort((a,b)=>{
-        return a.y - b.y;
-      }).forEach((object) => {
-        object.sprite.draw(this.ctx, cameraPerson);
-      });
+      Object.values(this.map.gameObjects)
+        .sort((a, b) => {
+          return a.y - b.y;
+        })
+        .forEach((object) => {
+          object.sprite.draw(this.ctx, cameraPerson);
+        });
 
       //drawing Upperlayer
       this.map.drawUpperImage(this.ctx, cameraPerson);
@@ -42,12 +48,11 @@ class Overworld {
     step();
   }
   init() {
+ 
     this.map = new OverworldMap(window.OverworldMaps.TestTown);
     this.map.mountObjects();
-
     this.directionInput = new DirectionInput();
     this.directionInput.init();
-
     this.startGameLoop();
 
     // this.map.startCutscene([
