@@ -16,9 +16,22 @@ body{
     margin: 0 auto;
     margin-top: 20px;
     outline: 1px solid white;
-
+background-color: rgba(0, 0, 0, 0.863);
     transform: scale(3) translateY(50%);
 }
 .game-container canvas {
     image-rendering: pixelated;
+}
+.app{
+    background-image: url("https://cdn.vox-cdn.com/thumbor/FDcCzD1ir-Wyo83R5f0XOPLuOe8=/0x0:1920x1080/1200x800/filters:focal(727x221:1033x527)/cdn.vox-cdn.com/uploads/chorus_image/image/72021786/io_fantasy.0.jpg");
+    height: 1200px;
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover;
+}
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 20px;
+    margin-bottom: -80px;
 }
